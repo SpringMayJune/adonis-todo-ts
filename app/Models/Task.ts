@@ -9,7 +9,7 @@ export default class Task extends BaseModel {
   public title: string;
 
   @column()
-  public description: string;
+  public description?: string;
 
   @column()
   public is_completed: boolean;
