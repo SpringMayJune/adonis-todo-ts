@@ -10,8 +10,15 @@ export default class TasksController {
   }
 
   public async index({ response }: HttpContextContract) {
-    const tasks = await this.tasksService.getTasks();
-    return response.status(200).json(tasks)
+    try {
+      const tasks = await this.tasksService.getTasks();
+      return response.status(200).json(tasks)
+
+    } catch (error) {
+      console.error(error);
+      return response.status(400).json({ error: error.messages })
+
+    }
   }
 
   public async create({ request, response }: HttpContextContract) {
@@ -21,7 +28,7 @@ export default class TasksController {
         is_completed: request.input('is_completed', false),
       })
       const payload = await request.validate({ schema: TaskValidator.createTaskSchema, data });
-      ;
+
       const newTask = await this.tasksService.createTask(payload)
       response.status(200).json({
         task: newTask,
